@@ -1,0 +1,17 @@
+/*! whatsapp-widget - v3.2.4 */
+"use strict";class WhatsappWidget{constructor({title:e="Have Questions?",description:t="What with us on Whatsapp!",agents:a=[]}){this.agents=a,this.description=t,this.package="whatsapp-widget",this.title=e,this.url="https://cdn.jsdelivr.net/gh/miguelcolmenares/whatsapp-widget@3.2.4",this.version="3.2.4",this.$widget,this.agents.length&&0!==this._activeAgents()&&this.render()}_activeAgents(){let t=0;return this.agents.forEach(e=>{new WhatsappAgent(e).isEnabled&&t++}),t}_agents(){const t=document.createElement("section");return t.classList.add("wa-w_a"),this.agents.forEach(e=>{new WhatsappAgent(e).isEnabled&&t.append(new WhatsappAgent(e).render())}),t}_button(){return document.createRange().createContextualFragment(`<button class="wa-w_b" title="${this.title}">
+			<span class="wa-w-i wa-w-i-w"></span>
+		</button>`)}_click(){"dataLayer"in window&&dataLayer.push({event:"ga_event",category:"Widget WhatsApp",action:"Click WhatsApp",label:"Click Icono"}),this.widget.classList.toggle("open")}_clickAgent({message:e="",phone:t="",title:a=""}){"dataLayer"in window&&dataLayer.push({event:"ga_event",category:"Widget WhatsApp",action:"Click WhatsApp",label:a});a=e.length?"?text="+e:"";window.open("https://wa.me/"+t.replace(/ /g,"").replace("+","")+a,"_blank")}_header(){return document.createRange().createContextualFragment(`<header class="wa-w_h">
+			<span class="wa-w_h_t">${this.title}</span>
+			<span class="wa-w_h_s">
+				<span class="wa-w_h_i wa-w-i wa-w-i-w"></span>
+				${this.description}
+			</span>
+		</header>`)}async _styles(){const t=document.createElement("style");return await fetch(`${this.url}/dist/css/${this.package}.css`).then(e=>e.text()).then(e=>t.append(e)),document.head.append(t)}async render(){await this._styles();const e=document.createElement("div");return e.classList.add("wa-w"),e.append(this._header()),e.append(this._agents()),e.append(this._button()),document.body.append(e),e.querySelector(".wa-w_b").addEventListener("click",()=>{this._click()}),e.querySelectorAll(".js-owaa").forEach(t=>{t.addEventListener("click",e=>{e.preventDefault(),this._clickAgent(t.dataset)})}),this.widget=e}get widget(){return this.$widget}set widget(e){this.$widget=e}}class WhatsappAgent{constructor({cta:e="",hours:t="",message:a="",name:s="",phone:n="",schedule:i=[]}){this.cta=e,this.description=t,this.message=a,this.name=s,this.phone=n,this.schedule=i}get isEnabled(){const e=new Date;if(!this.schedule.length||!this.schedule[e.getDay()].length)return!0;var[t,a]=[this.schedule[e.getDay()][0].split(":"),this.schedule[e.getDay()][1].split(":")];const[s,n]=[new Date(e.getFullYear(),e.getMonth(),e.getDate()<10?"0"+e.getDate():e.getDate(),+t[0],+t[1]),new Date(e.getFullYear(),e.getMonth(),e.getDate()<10?"0"+e.getDate():e.getDate(),+a[0],+a[1])];return e.getTime()>=s.getTime()&&e.getTime()<=n.getTime()}render(){return document.createRange().createContextualFragment(`<a href="#" data-phone="${this.phone}" data-title="${this.name}" data-message="${this.message}" class="wa-w_a_a js-owaa" title="${this.name} ${this.phone}">
+			<span class="wa-w_a_a_i"><span class="wa-w-i wa-w-i-cc"></span></span>
+			<span class="wa-w_a_a_c">
+				<span class="a_t">${this.name}</span>
+				<span class="a_s">${this.description}</span>
+				<span class="a_c">${this.cta}<span class="a_c_i wa-w-i wa-w-i-e"></span></span>
+			</span>
+		</a>`)}}window.whatsapp=WhatsappWidget;
